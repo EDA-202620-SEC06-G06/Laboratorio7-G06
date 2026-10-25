@@ -27,6 +27,9 @@
 import os
 import csv
 import datetime
+from DataStructures.Tree import binary_search_tree as bst
+from DataStructures.List import array_list as al
+from DataStructures.Map import map_linear_probing as lp
 
 # TODO Realice la importación del Árbol Binario Ordenado
 # TODO Realice la importación de ArrayList (al) como estructura de datos auxiliar para sus requerimientos
