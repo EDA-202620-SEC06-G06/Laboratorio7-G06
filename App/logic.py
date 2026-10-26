@@ -133,7 +133,7 @@ def new_data_entry(crime):
     binario.
     """
     entry = {'offenseIndex': None, 'lstcrimes': None}
-    entry['offenseIndex'] = lp.new_map(num_elements=30,
+    entry['offenseIndex'] = lp.new_map(num_keys=30,
                                         load_factor=0.5)
     entry['lstcrimes'] = al.new_list()
     return entry
@@ -166,24 +166,21 @@ def index_height(analyzer):
     """
     Altura del arbol
     """
-    # TODO Completar la función de consulta de altura del árbol
-    pass
+    return bst.height(analyzer['dateIndex'])
 
 
 def index_size(analyzer):
     """
     Numero de elementos en el indice
     """
-    # TODO Completar la función de consulta de tamaño del árbol
-    pass
+    return bst.size(analyzer['dateIndex'])
 
 
 def min_key(analyzer):
     """
     Llave mas pequena
     """
-    # TODO Completar la función de consulta de la llave mínima
-    pass
+    return bst.get_min(analyzer['dateIndex'])
 
 
 def max_key(analyzer):

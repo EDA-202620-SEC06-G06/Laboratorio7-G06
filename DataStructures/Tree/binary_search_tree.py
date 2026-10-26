@@ -6,8 +6,8 @@ def new_map ():
     return bst
 
 def put(my_bst,key,value):
-    current_node = insert_node(my_bst["root"],key,value)
-    return current_node
+    my_bst["root"] = insert_node(my_bst["root"],key,value)
+    return my_bst
 
 def insert_node(current_node,key,value):
     
