@@ -134,7 +134,9 @@ def test_insert_element():
     lista["last"] = lista["first"]
 
     assert type(lista) == dict
-    assert type(lt.insert_element(lista, 2, 0)) == dict
+    assert lt.insert_element(lista, 1, 2) is lista
+    assert lt.size(lista) == 2
+    assert lt.get_element(lista, 1) == 2
 
 
 @handle_not_implemented
@@ -156,7 +158,8 @@ def test_delete_element():
     lista["first"] = {"info": 1, "next": None}
     lista["last"] = lista["first"]
 
-    assert type(lt.delete_element(lista, 0)) == dict
+    assert lt.delete_element(lista, 0) == 1
+    assert lt.size(lista) == 0
 
 
 @handle_not_implemented
@@ -194,3 +197,4 @@ def test_sub_list():
 
     assert sub_list is not None
     assert type(sub_list) == dict
+    assert lt.size(sub_list) == 0

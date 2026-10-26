@@ -165,8 +165,9 @@ def test_delete_element():
     lista["size"] = 3
     lista["elements"] = [3, 2, 1]
 
-    assert lt.delete_element(lista, 1) is not None
-    assert type(lt.delete_element(lista, 1)) == dict
+    assert lt.delete_element(lista, 1) == 2
+    assert lista["size"] == 2
+    assert lista["elements"] == [3, 1]
 
 
 @handle_not_implemented

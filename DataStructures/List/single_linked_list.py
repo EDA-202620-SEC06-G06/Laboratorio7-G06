@@ -195,19 +195,19 @@ def exchange(new_list: dict, pos1: int, pos2: int):
         posicion2["info"] = info
         return new_list
     
-def sub_list(new_list: dict, pos: int, num_elem: int):
-    if is_empty(new_list):
-        raise Exception("Lista vacia")
-    elif pos < 0 or pos >= size(new_list) or (pos + num_elem) > size(new_list):
+def sub_list(source_list: dict, pos: int, num_elem: int):
+    if num_elem < 0 or pos < 0 or pos > size(source_list) or (pos + num_elem) > size(source_list):
         raise Exception("Posicion fuera de rango")
-    else:
-        lista2 = new_list()
-        actual = encontrar_posicion(new_list, pos)
-        i = 0
-        for i in range(num_elem):
-            add_last(lista2, actual["info"])
-            actual = actual["next"]
-        return lista2     
+
+    result = new_list()
+    if num_elem == 0:
+        return result
+
+    actual = encontrar_posicion(source_list, pos)
+    for _ in range(num_elem):
+        add_last(result, actual["info"])
+        actual = actual["next"]
+    return result
 
 def default_sort_criteria(element_1, element_2):
 
