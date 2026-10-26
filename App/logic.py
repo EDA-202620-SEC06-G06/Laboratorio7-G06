@@ -187,16 +187,24 @@ def max_key(analyzer):
     """
     Llave mas grande
     """
-    # TODO Completar la función de consulta de la llave máxima
-    pass
+    return bst.get_max(analyzer["datesIndex"])
 
 
 def get_crimes_by_range(analyzer, initialDate, finalDate):
     """
     Retorna el numero de crimenes en un rago de fechas.
     """
-    # TODO Completar la función de consulta de crimenes por rango de fechas
-    pass
+    dates_list = bst.keys(analyzer["datesIndex"], initialDate, finalDate)
+    total_crimes = 0
+    
+    for i in range(al.size(dates_list)):
+        date_key = al.get_element(dates_list, i)
+        date_entry = bst.get(analyzer["datesIndex"], date_key)
+        
+        if date_entry is not None:
+            total_crimes += al.size(date_entry["crimes"])
+            
+    return total_crimes
 
 
 def get_crimes_by_range_code(analyzer, initialDate, offensecode):
@@ -204,5 +212,15 @@ def get_crimes_by_range_code(analyzer, initialDate, offensecode):
     Para una fecha determinada, retorna el numero de crimenes
     de un tipo especifico.
     """
-    # TODO Completar la función de consulta de crimenes por tipo de crimen en una fecha
-    pass
+    date_entry = bst.get(analyzer["datesIndex"], initialDate)
+    
+    if date_entry is None:
+        return 0
+    
+    offenses_map = date_entry["offensesMap"]
+    
+    if lp.contains(offenses_map, offensecode):
+        offense_entry = lp.get(offenses_map, offensecode)
+        return al.size(offense_entry)
+    
+    return 0
