@@ -29,12 +29,8 @@ import csv
 import datetime
 from DataStructures.Tree import binary_search_tree as bst
 from DataStructures.List import array_list as al
+from DataStructures.List import single_linked_list as sll
 from DataStructures.Map import map_linear_probing as lp
-
-# TODO Realice la importación del Árbol Binario Ordenado
-# TODO Realice la importación de ArrayList (al) como estructura de datos auxiliar para sus requerimientos
-# TODO Realice la importación de LinearProbing (lp) como estructura de datos auxiliar para sus requerimientos
-
 
 data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
@@ -54,7 +50,6 @@ def new_logic():
                 }
 
     analyzer['crimes'] = al.new_list()
-    # TODO completar la creación del mapa ordenado
     analyzer['dateIndex'] = bst.new_map()
     
     return analyzer
@@ -187,22 +182,32 @@ def max_key(analyzer):
     """
     Llave mas grande
     """
-    return bst.get_max(analyzer["datesIndex"])
+    return bst.get_max(analyzer["dateIndex"])
+
+
+def _as_date(value):
+    if isinstance(value, datetime.datetime):
+        return value.date()
+    if isinstance(value, datetime.date):
+        return value
+    return datetime.datetime.strptime(value, '%Y-%m-%d').date()
 
 
 def get_crimes_by_range(analyzer, initialDate, finalDate):
     """
     Retorna el numero de crimenes en un rago de fechas.
     """
-    dates_list = bst.keys(analyzer["datesIndex"], initialDate, finalDate)
+    initial_date = _as_date(initialDate)
+    final_date = _as_date(finalDate)
+    dates_list = bst.keys(analyzer["dateIndex"], initial_date, final_date)
     total_crimes = 0
     
-    for i in range(al.size(dates_list)):
-        date_key = al.get_element(dates_list, i)
-        date_entry = bst.get(analyzer["datesIndex"], date_key)
+    for i in range(sll.size(dates_list)):
+        date_key = sll.get_element(dates_list, i)
+        date_entry = bst.get(analyzer["dateIndex"], date_key)
         
         if date_entry is not None:
-            total_crimes += al.size(date_entry["crimes"])
+            total_crimes += al.size(date_entry["lstcrimes"])
             
     return total_crimes
 
@@ -212,15 +217,16 @@ def get_crimes_by_range_code(analyzer, initialDate, offensecode):
     Para una fecha determinada, retorna el numero de crimenes
     de un tipo especifico.
     """
-    date_entry = bst.get(analyzer["datesIndex"], initialDate)
+    initial_date = _as_date(initialDate)
+    date_entry = bst.get(analyzer["dateIndex"], initial_date)
     
     if date_entry is None:
         return 0
     
-    offenses_map = date_entry["offensesMap"]
+    offenses_map = date_entry["offenseIndex"]
     
     if lp.contains(offenses_map, offensecode):
         offense_entry = lp.get(offenses_map, offensecode)
-        return al.size(offense_entry)
+        return al.size(offense_entry["lstoffenses"])
     
     return 0

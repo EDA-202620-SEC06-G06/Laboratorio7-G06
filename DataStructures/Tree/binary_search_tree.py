@@ -110,6 +110,32 @@ def get_max_node(current_node):
         return current_node
     return get_max_node(current_node["right"])
 
+def remove(my_bst, key):
+    my_bst["root"] = remove_node(my_bst["root"], key)
+    return my_bst
+
+def remove_node(current_node, key):
+    if current_node is None:
+        return None
+
+    if key < current_node["key"]:
+        current_node["left"] = remove_node(current_node["left"], key)
+    elif key > current_node["key"]:
+        current_node["right"] = remove_node(current_node["right"], key)
+    else:
+        if current_node["left"] is None:
+            return current_node["right"]
+        if current_node["right"] is None:
+            return current_node["left"]
+
+        successor = get_min_node(current_node["right"])
+        current_node["key"] = successor["key"]
+        current_node["value"] = successor["value"]
+        current_node["right"] = delete_min_tree(current_node["right"])
+
+    current_node["size"] = 1 + size_tree(current_node["left"]) + size_tree(current_node["right"])
+    return current_node
+
 def delete_min(my_bst):
     my_bst["root"] = delete_min_tree(my_bst["root"])
     return my_bst
@@ -148,6 +174,60 @@ def height_tree(root):
     right_h = height_tree(root["right"])
     return 1 + max(left_h, right_h)
 
+def floor(my_bst, key):
+    node = floor_node(my_bst["root"], key)
+    return None if node is None else node["key"]
+
+def floor_node(current_node, key):
+    if current_node is None:
+        return None
+    if key == current_node["key"]:
+        return current_node
+    if key < current_node["key"]:
+        return floor_node(current_node["left"], key)
+
+    candidate = floor_node(current_node["right"], key)
+    return candidate if candidate is not None else current_node
+
+def ceiling(my_bst, key):
+    node = ceiling_node(my_bst["root"], key)
+    return None if node is None else node["key"]
+
+def ceiling_node(current_node, key):
+    if current_node is None:
+        return None
+    if key == current_node["key"]:
+        return current_node
+    if key > current_node["key"]:
+        return ceiling_node(current_node["right"], key)
+
+    candidate = ceiling_node(current_node["left"], key)
+    return candidate if candidate is not None else current_node
+
+def select(my_bst, position):
+    if position < 0 or position >= size_tree(my_bst["root"]):
+        return None
+    return select_node(my_bst["root"], position)["key"]
+
+def select_node(current_node, position):
+    left_size = size_tree(current_node["left"])
+    if position < left_size:
+        return select_node(current_node["left"], position)
+    if position > left_size:
+        return select_node(current_node["right"], position - left_size - 1)
+    return current_node
+
+def rank(my_bst, key):
+    return rank_node(my_bst["root"], key)
+
+def rank_node(current_node, key):
+    if current_node is None:
+        return 0
+    if key < current_node["key"]:
+        return rank_node(current_node["left"], key)
+    if key > current_node["key"]:
+        return 1 + size_tree(current_node["left"]) + rank_node(current_node["right"], key)
+    return size_tree(current_node["left"])
 
 def keys(my_bst, key_initial, key_final):
     key_list = sll.new_list()
